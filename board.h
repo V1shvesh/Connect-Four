@@ -66,8 +66,8 @@ struct Node *createBoard()
     //connects each row to the next row    
     for (i = 0; i < 6; i++)
     {
-	temp = node1;
-	nTemp = node2;
+	temp = node1->right;
+	nTemp = node2->right;
 	for (j = 1; j < 6; j++)
 	{
 	    temp->down = nTemp;
@@ -90,15 +90,38 @@ void displayBoard(struct Node *head)
     int i, j;
     for (i = 0; i < 7; i++)
     {
-	colNode = rowNode;
-	for (j = 0; j < 6; j++)
-	{
-	    printf("%c", colNode->dispChar);
-	    colNode = colNode->right;
-	}
-	printf("\n");
-	rowNode = rowNode->down;
+        colNode = rowNode;
+    	for (j = 0; j < 6; j++)
+    	{
+    	    printf("%c", colNode->dispChar);
+    	    colNode = colNode->right;
+    	}
+	   printf("\n");
+	   rowNode = rowNode->down;
     }
 }
 
-//TODO boardUpdate function
+//completed boardUpdate function
+int boardUpdate(struct Node *head,char symbol,int col)
+{
+    int i;
+    if(col<0||col>5)
+        return -1; //Invalid Column No.
+    Node *temp = head,*nTemp = NULL;
+    while(temp->col != col)
+        temp = temp->right; //Finding the column
+    if(temp->dispChar != '.')
+        return 0; //Column Filled
+    //Finding the Node in the column to be updated
+    for (i = 0; i < 4; ++i)
+    {
+        if(temp->down->dispChar != '.')
+            {
+                temp->dispChar = symbol;
+                break;
+            }
+        temp = temp->down;
+    }
+    temp->dispChar = symbol; //Updation
+    return 1;
+}
