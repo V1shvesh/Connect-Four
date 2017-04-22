@@ -93,12 +93,13 @@ void displayBoard(struct Node *head)
         colNode = rowNode;
     	for (j = 0; j < 6; j++)
     	{
-    	    printf("%c", colNode->dispChar);
+    	    printf("%c ", colNode->dispChar);
     	    colNode = colNode->right;
     	}
 	   printf("\n");
 	   rowNode = rowNode->down;
     }
+    printf("1 2 3 4 5 6\n");
 }
 
 //completed boardUpdate function
@@ -107,13 +108,13 @@ int boardUpdate(struct Node *head,char symbol,int col)
     int i;
     if(col<0||col>5)
         return -1; //Invalid Column No.
-    Node *temp = head,*nTemp = NULL;
+    struct Node *temp = head,*nTemp = NULL;
     while(temp->col != col)
         temp = temp->right; //Finding the column
     if(temp->dispChar != '.')
         return 0; //Column Filled
     //Finding the Node in the column to be updated
-    for (i = 0; i < 4; ++i)
+    for (i = 0; i < 6; ++i)
     {
         if(temp->down->dispChar != '.')
             {
@@ -124,4 +125,20 @@ int boardUpdate(struct Node *head,char symbol,int col)
     }
     temp->dispChar = symbol; //Updation
     return 1;
+}
+
+void flushBoard(struct Node *head)
+{
+    struct Node *temp = NULL,*rtemp = head,*trash = NULL;
+    while(rtemp)
+    {
+        temp = rtemp;
+        while(temp)
+        {
+            trash = temp;
+            temp = temp->right;
+            free(trash);
+        }
+        rtemp = rtemp->down;
+    }
 }
