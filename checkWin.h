@@ -51,7 +51,7 @@ int findColumn(struct Node *head,int c)
 int findRow(struct Node *head,int r)
 {
 	struct Node *temp = head;
-	char *arr = (char *)malloc(7*sizeof(char));
+	char *arr = (char *)malloc(6*sizeof(char));
 	int i,j;
 	for(i=0; i < r;i++)
 	{
@@ -75,11 +75,98 @@ int findRow(struct Node *head,int r)
 	free(arr);
 	return 0;
 }
-/*int findDiag(struct Node *head)
+int findDiag(struct Node *head)
 {
-	int i;
-	for(i = )	
-}*/
+	int i,count,arrsize;
+	char *arr=NULL;
+
+	// Top-Right Diagonals
+	struct Node *rowN = NULL,*colN = NULL;
+	for(i = 3;i<9;i++)
+	{
+		arrsize = i < 6 ? i+1 : 12 - i;
+		arr = (char *)malloc(sizeof(char)*arrsize);
+		rowN = head; 
+		count = 0;
+		// printf("Iteration %d--------------------------- \n",arrsize);
+		while(rowN!=NULL&&count<arrsize)
+		{
+		 	colN = rowN;
+			while(colN!=NULL)
+			{
+				// printf("%d,%d ",colN->row,colN->col);
+				if(colN->row+colN->col==i)
+					break;
+				colN = colN->right;
+			}
+			// printf("\n");
+			if(colN!=NULL)
+			{
+				arr[count] = colN->dispChar;
+				count++;
+			}
+			rowN = rowN->down;
+			
+		}
+		// printf("\n%s------------------------------------------------\n",arr);
+		if(strstr(arr,"RRRR")!=NULL)
+		{
+			free(arr);
+			return R;
+		}
+		if(strstr(arr,"YYYY")!=NULL)
+		{
+			free(arr);
+			return Y;
+		}
+
+		free(arr);
+	}
+	
+	//Top-Left Diagonals
+	struct Node *cur = NULL;
+	for(i=2;i>=-3;i--)
+	{
+		cur = head;
+		// printf("Iteration %d ---------------------------------------------------\n",i);
+		if(i>0)
+		{
+			for(count = 0;count<i;count++)
+				cur = cur->right;
+		}
+		else
+		{
+			for(count = 0;count<-i;count++)
+				cur = cur->down;	
+		}
+		// printf("cur = (%d,%d)\n",cur->row,cur->col);
+		arrsize = i>-1 ? 6 - i : i+7;
+		// printf("arrsize = %d\n",arrsize);
+		count = 0;
+		arr = (char *)malloc(sizeof(char)*arrsize);
+		while(cur->down!=NULL&&cur->right!=NULL)
+		{
+			arr[count++] =  cur->dispChar;
+			cur = cur->down;
+			cur = cur->right;
+
+		}
+		arr[count] = cur->dispChar;
+		// printf("%s\n",arr);
+		if(strstr(arr,"RRRR")!=NULL)
+		{
+			free(arr);
+			return R;
+		}
+		if(strstr(arr,"YYYY")!=NULL)
+		{
+			free(arr);
+			return Y;
+		}
+		free(arr);
+	}
+	return 0;	
+}
 int checkWin(struct Node *head)
 {
 	int i,t;
@@ -93,6 +180,9 @@ int checkWin(struct Node *head)
 		if(t=findRow(head,i))
 			return t;
 	}
+
+	if(t=findDiag(head))
+			return t;
 	return 0;
 }
 // int checkFull(struct Node *head)

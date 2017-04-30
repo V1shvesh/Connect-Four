@@ -16,9 +16,11 @@ int move (struct Node *head,struct Player p)
     int c;
     printf("Enter col num:\n");
     scanf("%d", &c);
+    if(c>=7)
+    	return 100;
     int res = boardUpdate(head,p.symbol, c-1);
     if(!res)
-    	printf("Invalid Choice!!");
+    	printf("Invalid Choice!!\n");
     displayBoard(head);
     return res;
 }
@@ -44,9 +46,10 @@ int main()
 		else
 			moves += move(board,P2);
 	}
-
+	if(moves>99)
+		printf("Game Ended!!\n");
 	// Result Declaration
-	if(!result)
+	else if(!result)
 		printf("It's a Draw!!!\n");
 	else if(result == 1)
 		printf("P1(%s) WON!!!\n",P1.name);
