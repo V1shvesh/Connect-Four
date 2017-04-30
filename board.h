@@ -29,10 +29,10 @@ struct Node *createNewNode(int r, int c, struct Window *w)
 
     temp->color = 'W';
     temp->texture = loadTexture("Images/w.png", w);
-    temp->rect.w = SCREEN_WIDTH / 6;
-    temp->rect.h = SCREEN_HEIGHT / 7;
-    temp->rect.x = (temp->rect.w) * c;
-    temp->rect.y = (temp->rect.h) * r;
+    temp->rect.w = (SCREEN_WIDTH - 100) / 6;
+    temp->rect.h = (SCREEN_HEIGHT - 100) / 7;
+    temp->rect.x = (temp->rect.w) * c + 50;
+    temp->rect.y = (temp->rect.h) * r + 100;
 
     temp->right = NULL;
     temp->down = NULL;
@@ -155,41 +155,3 @@ int boardUpdate(struct Window *w, struct Node *head, char playerColor, int col)
 }
 
 //TODO Create a flush Board function
-
-
-//Temporary Main function
-/*
-int main (int argc, char **argv)
-{
-  struct Window w;
-  w.window = NULL;
-  w.renderer = NULL;
-
-  initSystem(&w);
-
-  struct Node *head = createBoard(&w);
-
-  SDL_Event e;
-  int isQuit = 0;
-  while (!isQuit)
-  {
-    while (SDL_PollEvent(&e) != 0)
-    {
-      switch (e.type)
-      {
-        case SDL_QUIT:
-          isQuit = 1;
-          break;
-        default:
-          break;
-      }
-    }
-    printBoard(head, &w);
-  }
-
-
-  closeSystem(&w);
-
-  return 0;
-}
-*/
