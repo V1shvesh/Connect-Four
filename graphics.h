@@ -2,8 +2,8 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 
-#define SCREEN_WIDTH 600  //Should be a multiple of 6
-#define SCREEN_HEIGHT 700 //Should be a multiple of 7
+#define SCREEN_WIDTH 700
+#define SCREEN_HEIGHT 800
 
 struct Window
 {
@@ -40,7 +40,7 @@ int initSystem(struct Window *w)
       }
       else
       {
-        SDL_SetRenderDrawColor((w)->renderer, 0, 128, 255, 255);
+        SDL_SetRenderDrawColor((w)->renderer, 128, 150, 200, 255);
 
         int imgFlags =  IMG_INIT_PNG;
         if (!(IMG_Init(imgFlags) & imgFlags))
@@ -89,42 +89,3 @@ void closeSystem(struct Window *w)
   IMG_Quit();
   SDL_Quit();
 }
-
-//Temporary main function
-/*
-int main (int argc, char **argv)
-{
-  struct Window w;
-  w.window = NULL;
-  w.renderer = NULL;
-
-  initSystem(&w);
-
-  SDL_Texture *t = loadTexture("Images/test.png", &w);
-
-  SDL_Event e;
-  int isQuit = 0;
-  SDL_RenderClear(w.renderer);
-  while (!isQuit)
-  {
-    while (SDL_PollEvent(&e) != 0)
-    {
-      switch (e.type)
-      {
-        case SDL_QUIT:
-          isQuit = 1;
-          break;
-        default:
-          break;
-      }
-    }
-    SDL_RenderCopy(w.renderer, t, NULL, NULL);
-    SDL_RenderPresent(w.renderer);
-  }
-
-  SDL_DestroyTexture(t);
-  closeSystem(&w);
-
-  return 0;
-}
-*/
