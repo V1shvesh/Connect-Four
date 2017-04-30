@@ -6,21 +6,20 @@
 struct Player
 {
     char name[30];
-    char symbol;
+    int color;
 };
 
 //Gets Player Info
 //Param struct Player pointer, Player Number
 void getPlayerInfo (struct Player *p, int playerNum)
 {
-    char s[30], c;
+    char s[30];
     printf("Enter Player %d Name\n", playerNum);
     scanf("%s", s);
 
     if(playerNum==1)
-    	c = 'R';
+    	 p->color = 'R';
     else
-    	c = 'Y';
+    	p->color = 'Y';
     strcpy(p->name, s);
-    p->symbol = c;
-}   
+}

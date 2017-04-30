@@ -1,6 +1,8 @@
 #include <string.h>
+
 #define Y -1
 #define R 1
+#define D 0
 
 //Returns the symbol inside the node of provided coords
 char find_val(struct Node *head,int r,int c)
@@ -15,7 +17,7 @@ char find_val(struct Node *head,int r,int c)
 	{
 		temp = temp->right;
 	}
-	return temp->dispChar;
+	return temp->color;
 }
 
 //Check Column For Win
@@ -30,7 +32,7 @@ int findColumn(struct Node *head,int c)
 	}
 	for(j = 0; j < 7; j++)
 	{
-		arr[j] = temp->dispChar;
+		arr[j] = temp->color;
 		temp = temp->down;
 	}
 	if(strstr(arr,"RRRR")!=NULL)
@@ -59,7 +61,7 @@ int findRow(struct Node *head,int r)
 	}
 	for(j = 0; j < 6; j++)
 	{
-		arr[j] = temp->dispChar;
+		arr[j] = temp->color;
 		temp = temp->right;
 	}
 	if(strstr(arr,"RRRR")!=NULL) //Ensure strstr is used properly
@@ -86,27 +88,27 @@ int findDiag(struct Node *head)
 	{
 		arrsize = i < 6 ? i+1 : 12 - i;
 		arr = (char *)malloc(sizeof(char)*arrsize);
-		rowN = head; 
+		rowN = head;
 		count = 0;
 		// printf("Iteration %d--------------------------- \n",arrsize);
-		while(rowN!=NULL&&count<arrsize)
+		while(rowN != NULL && count < arrsize)
 		{
 		 	colN = rowN;
-			while(colN!=NULL)
+			while(colN != NULL)
 			{
 				// printf("%d,%d ",colN->row,colN->col);
-				if(colN->row+colN->col==i)
+				if(colN->row + colN->col == i)
 					break;
 				colN = colN->right;
 			}
 			// printf("\n");
 			if(colN!=NULL)
 			{
-				arr[count] = colN->dispChar;
+				arr[count] = colN->color;
 				count++;
 			}
 			rowN = rowN->down;
-			
+
 		}
 		// printf("\n%s------------------------------------------------\n",arr);
 		if(strstr(arr,"RRRR")!=NULL)
@@ -122,7 +124,7 @@ int findDiag(struct Node *head)
 
 		free(arr);
 	}
-	
+
 	//Top-Left Diagonals
 	struct Node *cur = NULL;
 	for(i=2;i>=-3;i--)
@@ -137,7 +139,7 @@ int findDiag(struct Node *head)
 		else
 		{
 			for(count = 0;count<-i;count++)
-				cur = cur->down;	
+				cur = cur->down;
 		}
 		// printf("cur = (%d,%d)\n",cur->row,cur->col);
 		arrsize = i>-1 ? 6 - i : i+7;
@@ -146,12 +148,12 @@ int findDiag(struct Node *head)
 		arr = (char *)malloc(sizeof(char)*arrsize);
 		while(cur->down!=NULL&&cur->right!=NULL)
 		{
-			arr[count++] =  cur->dispChar;
+			arr[count++] =  cur->color;
 			cur = cur->down;
 			cur = cur->right;
 
 		}
-		arr[count] = cur->dispChar;
+		arr[count] = cur->color;
 		// printf("%s\n",arr);
 		if(strstr(arr,"RRRR")!=NULL)
 		{
@@ -165,9 +167,10 @@ int findDiag(struct Node *head)
 		}
 		free(arr);
 	}
-	return 0;	
+	return 0;
 }
-int checkWin(struct Node *head)
+
+int isGameOver(struct Node *head)
 {
 	int i,t;
 	for(i=0;i<6;i++)
@@ -185,15 +188,3 @@ int checkWin(struct Node *head)
 			return t;
 	return 0;
 }
-// int checkFull(struct Node *head)
-// {
-// 	int i;
-// 	struct Node *temp = head;
-// 	for(i=0;i<6;i++)
-// 	{
-// 		if(temp->dispChar == '.')
-// 		return 0;
-// 		temp = temp->right;
-// 	}
-// 	return 1;
-// }
