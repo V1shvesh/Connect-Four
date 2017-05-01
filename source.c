@@ -11,13 +11,12 @@ int getColumn (int x, int y)
 }
 
 //Updates Game Board
-int move (struct Window *w, struct Node *head, struct Player p)
+int move (struct WindowElem *we, struct Window *w, struct Node *head, struct Player p)
 {
     int c, x, y;
     getMouseState(&x, &y);
     c = getColumn(x, y);
-    int res = boardUpdate(w, head, p.color, c-1);
-    printBoard(head, w);
+    int res = boardUpdate(we, w, head, p.color, c-1);
     return res;
 }
 
@@ -40,7 +39,13 @@ int main (int argc, char **argv)
   struct Node *board;
   board = createBoard(&w);
 
-  printBoard(board, &w);
+  //Graphical Window Elements Structure
+  struct WindowElem we;
+
+  //Main Window Elements Initialization
+  mainWindowInit(&we, &w);
+
+  printBoard(board, &w, &we);
 
   //Main Game Loop
   SDL_Event e;
@@ -62,13 +67,13 @@ int main (int argc, char **argv)
     if (isMousePressed)
     {
       if (moves % 2 == 0)
-        moves += move(&w, board, P1);
+        moves += move(&we, &w, board, P1);
       else
-        moves += move(&w, board, P2);
+        moves += move(&we, &w, board, P2);
       isMousePressed = 0;
       moves++;
     }
-    printBoard(board, &w);
+    printBoard(board, &w, &we);
   }
 
   if (result == R)
