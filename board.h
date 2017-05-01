@@ -1,5 +1,14 @@
 #include "graphics.h"
 
+struct WindowElem
+{
+  SDL_Texture *banner;
+  SDL_Rect bannerRect;
+
+  SDL_Texture *turnTexture;
+  SDL_Rect turnLeftRect, turnRightRect;
+};
+
 //structure for each Node of Board
 struct Node
 {
@@ -91,13 +100,45 @@ struct Node *createBoard(struct Window *w)
   return head;
 }
 
+//Initialisation of Main Window Textures
+void mainWindowInit(struct WindowElem *we, struct Window *w)
+{
+  we->banner = loadTexture("Images/banner.png", w);
+  we->bannerRect.x = 0;
+  we->bannerRect.y = 0;
+  we->bannerRect.w = 700;
+  we->bannerRect.h = 100;
+
+  we->turnTexture = loadTexture("Images/redTurn.png", w);
+  we->turnLeftRect.x = 0;
+  we->turnLeftRect.y = 100;
+  we->turnRightRect.x = SCREEN_WIDTH - 50;
+  we->turnRightRect.y = 100;
+
+  we->turnLeftRect.w = 50;
+  we->turnRightRect.w = 50;
+  we->turnLeftRect.h = 700;
+  we->turnRightRect.h = 700;
+}
+
 //Prints the Board
-void printBoard(struct Node *head, struct Window *w)
+void printBoard(struct Node *head, struct Window *w, struct WindowElem *we)
 {
   struct Node *rowNode = NULL, *colNode = NULL;
   rowNode = head;
   int i, j;
+
+  //Clear Screen
   SDL_RenderClear(w->renderer);
+
+  //Print Banner
+  SDL_RenderCopy(w->renderer, we->banner, NULL, &(we->bannerRect));
+
+  //Print The Turn Texture
+  SDL_RenderCopy(w->renderer, we->turnTexture, NULL, &(we->turnLeftRect));
+  SDL_RenderCopy(w->renderer, we->turnTexture, NULL, &(we->turnRightRect));
+
+  //Print The Board
   for (i = 0; i < 7; i++)
   {
     colNode = rowNode;
@@ -115,7 +156,7 @@ void printBoard(struct Node *head, struct Window *w)
 }
 
 //board update function
-int boardUpdate(struct Window *w, struct Node *head, char playerColor, int col)
+int boardUpdate(struct WindowElem *we, struct Window *w, struct Node *head, char playerColor, int col)
 {
     int i;
     if(col < 0 || col > 5)
@@ -137,9 +178,15 @@ int boardUpdate(struct Window *w, struct Node *head, char playerColor, int col)
         {
           temp->color = playerColor;
           if (playerColor == 'R')
-            temp->texture = loadTexture("Images/r.png", w);
+          {
+              temp->texture = loadTexture("Images/r.png", w);
+              we->turnTexture = loadTexture("Images/yellowTurn.png", w);  //Change Turn Texture
+          }
           else
-            temp->texture = loadTexture("Images/y.png", w);
+          {
+              temp->texture = loadTexture("Images/y.png", w);
+              we->turnTexture = loadTexture("Images/redTurn.png", w); //Change Turn Texture
+          }
           break;
         }
         temp = temp->down;
@@ -148,9 +195,15 @@ int boardUpdate(struct Window *w, struct Node *head, char playerColor, int col)
     //Lowest Node of the column
     temp->color = playerColor;
     if (playerColor == 'R')
+    {
       temp->texture = loadTexture("Images/r.png", w);
+      we->turnTexture = loadTexture("Images/yellowTurn.png", w);
+    }
     else
+    {
       temp->texture = loadTexture("Images/y.png", w);
+      we->turnTexture = loadTexture("Images/redTurn.png", w);
+    }
     return 0;
 }
 
