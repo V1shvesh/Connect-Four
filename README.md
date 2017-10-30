@@ -7,6 +7,12 @@ Things To Implement :
 3. Computer Bot to be made through AI
 4. Ranking System tracking wins, losses, draws etc.
 
+Install SDL2
+Debian based Systems :
+```
+sudo apt-get install libsdl2-dev
+```
+
 To compile, type :
 ```
 make all
