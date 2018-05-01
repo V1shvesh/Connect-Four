@@ -23,16 +23,16 @@ struct Node
   //SDL Rectangle stores positon of the Node
   SDL_Rect rect;
 
-  struct Node *right;
-  struct Node *down;
+  Node *right;
+  Node *down;
 };
 
 //Creates new Node
 //Param row and column integer
 // and returns new Node pointer
-struct Node *createNewNode(int r, int c, struct Window *w)
+Node *createNewNode(int r, int c, Window *w)
 {
-    struct Node *temp = (struct Node*)malloc(sizeof(struct Node));	// Allocate Memory for New Node
+    Node *temp = new Node;	// Allocate Memory for New Node
     temp->row = r;
     temp->col = c;
 
@@ -51,43 +51,42 @@ struct Node *createNewNode(int r, int c, struct Window *w)
 
 //Creates the Game Board
 //Returns pointer to the Game Board
-struct Node *createBoard(struct Window *w)
+Node *createBoard(Window *w)
 {
-  struct Node *head = NULL;
+  Node *head = NULL;
   head = createNewNode(0, 0, w);	//first Node
-  struct Node *temp = head;
-  int i, j, k;
+  Node *temp = head;
 
   //Creates First Column
-  for (i = 1; i < 7; i++)
+  for (int i = 1; i < 7; i++)
   {
 	  temp->down = createNewNode(i, 0, w);
 	  temp = temp->down;
   }
 
   //Creates all rows for each column created
-  for (i = 0; i < 7; i++)
+  for (int i = 0; i < 7; i++)
   {
 	  temp = head;
-	  for (k = 0; k < i; k++)
-	   temp = temp->down;
-    for (j = 1; j < 6; j++)
+	  for (int k = 0; k < i; k++)
+	    temp = temp->down;
+    for (int j = 1; j < 6; j++)
 	  {
 	    temp->right = createNewNode(i, j, w);
 	    temp = temp->right;
 	  }
   }
 
-  struct Node *node1 = NULL, *node2 = NULL, *nTemp = NULL;
+  Node *node1 = NULL, *node2 = NULL, *nTemp = NULL;
   node1 = head;
   node2 = head->down;
 
   //connects each row to the next row
-  for (i = 0; i < 6; i++)
+  for (int i = 0; i < 6; i++)
   {
 	  temp = node1->right;
 	  nTemp = node2->right;
-	  for (j = 1; j < 6; j++)
+	  for (int j = 1; j < 6; j++)
 	  {
 	    temp->down = nTemp;
 	    temp = temp->right;
@@ -101,32 +100,21 @@ struct Node *createBoard(struct Window *w)
 }
 
 //Initialisation of Main Window Textures
-void mainWindowInit(struct WindowElem *we, struct Window *w)
+void mainWindowInit(WindowElem *we, Window *w)
 {
   we->banner = loadTexture("Images/banner.png", w);
-  we->bannerRect.x = 0;
-  we->bannerRect.y = 0;
-  we->bannerRect.w = 700;
-  we->bannerRect.h = 100;
+  setRectCoordinates(we->bannerRect, 0, 0, 700, 100);
 
   we->turnTexture = loadTexture("Images/redTurn.png", w);
-  we->turnLeftRect.x = 0;
-  we->turnLeftRect.y = 100;
-  we->turnRightRect.x = SCREEN_WIDTH - 50;
-  we->turnRightRect.y = 100;
-
-  we->turnLeftRect.w = 50;
-  we->turnRightRect.w = 50;
-  we->turnLeftRect.h = 700;
-  we->turnRightRect.h = 700;
+  setRectCoordinates(we->turnLeftRect, 0, 100, 50, 700);
+  setRectCoordinates(we->turnRightRect, SCREEN_WIDTH - 10, 100, 50, 700);
 }
 
 //Prints the Board
-void printBoard(struct Node *head, struct Window *w, struct WindowElem *we)
+void printBoard(Node *head, Window *w, WindowElem *we)
 {
-  struct Node *rowNode = NULL, *colNode = NULL;
+  Node *rowNode = NULL, *colNode = NULL;
   rowNode = head;
-  int i, j;
 
   //Clear Screen
   SDL_RenderClear(w->renderer);
@@ -139,10 +127,10 @@ void printBoard(struct Node *head, struct Window *w, struct WindowElem *we)
   SDL_RenderCopy(w->renderer, we->turnTexture, NULL, &(we->turnRightRect));
 
   //Print The Board
-  for (i = 0; i < 7; i++)
+  for (int i = 0; i < 7; i++)
   {
     colNode = rowNode;
-    for (j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     {
         SDL_RenderCopy(w->renderer, colNode->texture, NULL, &(colNode->rect));
         colNode = colNode->right;
@@ -150,19 +138,18 @@ void printBoard(struct Node *head, struct Window *w, struct WindowElem *we)
 	  rowNode = rowNode->down;
   }
   rowNode = head;
-  for (i = 0; i < 6; i++)
+  for (int i = 0; i < 6; i++)
     rowNode = rowNode->down;
   SDL_RenderPresent(w->renderer);
 }
 
 //board update function
-int boardUpdate(struct WindowElem *we, struct Window *w, struct Node *head, char playerColor, int col)
+int boardUpdate(struct WindowElem *we, Window *w, Node *head, char playerColor, int col)
 {
-    int i;
     if(col < 0 || col > 5)
         return -1; //Invalid Col Num (will give player another chance)
 
-    struct Node *temp = head;
+    Node *temp = head;
 
     //Finding the column
     while(temp->col != col)
@@ -172,7 +159,7 @@ int boardUpdate(struct WindowElem *we, struct Window *w, struct Node *head, char
         return -1; //Column Filled (will give player another chance)
 
     //Finding the Node in the column to be updated
-    for (i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)
     {
         if(temp->down->color != 'W')
         {

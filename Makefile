@@ -6,7 +6,7 @@
 OBJS = source.c
 
 #CC specifies which compiler we're using
-CC = gcc
+CC = g++
 
 #COMPILER_FLAGS specifies the additional compilation options we're using
 # -w suppresses all warnings

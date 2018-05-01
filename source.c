@@ -11,7 +11,7 @@ int getColumn (int x, int y)
 }
 
 //Updates Game Board
-int move (struct WindowElem *we, struct Window *w, struct Node *head, struct Player p)
+int move (WindowElem *we, Window *w, Node *head, Player p)
 {
     int c, x, y;
     getMouseState(&x, &y);
@@ -23,12 +23,12 @@ int move (struct WindowElem *we, struct Window *w, struct Node *head, struct Pla
 int main (int argc, char **argv)
 {
   //Graphical Window Structure
-  struct Window w;
+  Window w;
   w.window = NULL;
   w.renderer = NULL;
 
   //Player Info
-  struct Player P1, P2;
+  Player P1, P2;
   getPlayerInfo(&P1,1);
   getPlayerInfo(&P2,2);
 
@@ -36,11 +36,11 @@ int main (int argc, char **argv)
   initSystem(&w);
 
   // Board Initialization
-  struct Node *board;
+  Node *board;
   board = createBoard(&w);
 
   //Graphical Window Elements Structure
-  struct WindowElem we;
+  WindowElem we;
 
   //Main Window Elements Initialization
   mainWindowInit(&we, &w);
@@ -77,9 +77,9 @@ int main (int argc, char **argv)
   }
 
   if (result == R)
-    printf("P1(%s) WON!!!\n",P1.name);
+    std::cout << "P1 " << P1.name << " WON!!!\n";
   else if (result == Y)
-    printf("P2(%s) WON!!!\n",P2.name);
+    std::cout << "P2 " << P2.name << " WON!!!\n";
   else
     printf("It's a Draw!!!\n");
 

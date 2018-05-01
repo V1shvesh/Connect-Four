@@ -1,19 +1,18 @@
-#include <string.h>
+#include <string>
 
 #define Y -1
 #define R 1
 #define D 0
 
 //Returns the symbol inside the node of provided coords
-char find_val(struct Node *head,int r,int c)
+char find_val(Node *head,int r,int c)
 {
-	int i,j;
-	struct Node *temp;
-	for (i = 0; i < r; ++i)
+	Node *temp;
+	for (int i = 0; i < r; ++i)
 	{
 		temp = temp->down;
 	}
-	for(j = 0;j < c; j++)
+	for(int j = 0;j < c; j++)
 	{
 		temp = temp->right;
 	}
@@ -21,73 +20,71 @@ char find_val(struct Node *head,int r,int c)
 }
 
 //Check Column For Win
-int findColumn(struct Node *head,int c)
+int findColumn(Node *head,int c)
 {
-	struct Node *temp = head;
-	char *arr = (char *)malloc(7*sizeof(char));
-	int i,j;
-	for(i=0; i < c;i++)
+	Node *temp = head;
+	char *arr = new char[7];
+	for(int i = 0; i < c; i++)
 	{
 		temp = temp->right;
 	}
-	for(j = 0; j < 7; j++)
+	for(int j = 0; j < 7; j++)
 	{
 		arr[j] = temp->color;
 		temp = temp->down;
 	}
 	if(strstr(arr,"RRRR")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return R;
 		}
 	if(strstr(arr,"YYYY")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return Y;
 		}
-	free(arr);
+	delete [] arr;
 	return 0;
 }
 
 //Check Row For Win
-int findRow(struct Node *head,int r)
+int findRow(Node *head, int r)
 {
-	struct Node *temp = head;
-	char *arr = (char *)malloc(6*sizeof(char));
-	int i,j;
-	for(i=0; i < r;i++)
+	Node *temp = head;
+	char *arr = new char[6];
+	for(int i = 0; i < r; i++)
 	{
 		temp = temp->down;
 	}
-	for(j = 0; j < 6; j++)
+	for(int j = 0; j < 6; j++)
 	{
 		arr[j] = temp->color;
 		temp = temp->right;
 	}
 	if(strstr(arr,"RRRR")!=NULL) //Ensure strstr is used properly
 		{
-			free(arr);
+			delete [] arr;
 			return R;
 		}
 	if(strstr(arr,"YYYY")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return Y;
 		}
-	free(arr);
+	delete [] arr;
 	return 0;
 }
-int findDiag(struct Node *head)
+int findDiag(Node *head)
 {
-	int i,count,arrsize;
+	int count, arrsize;
 	char *arr=NULL;
 
 	// Top-Right Diagonals
-	struct Node *rowN = NULL,*colN = NULL;
-	for(i = 3;i<9;i++)
+	Node *rowN = NULL,*colN = NULL;
+	for(int i = 3;i<9;i++)
 	{
 		arrsize = i < 6 ? i+1 : 12 - i;
-		arr = (char *)malloc(sizeof(char)*arrsize);
+		arr = new char[arrsize];
 		rowN = head;
 		count = 0;
 		// printf("Iteration %d--------------------------- \n",arrsize);
@@ -113,21 +110,21 @@ int findDiag(struct Node *head)
 		// printf("\n%s------------------------------------------------\n",arr);
 		if(strstr(arr,"RRRR")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return R;
 		}
 		if(strstr(arr,"YYYY")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return Y;
 		}
 
-		free(arr);
+		delete [] arr;
 	}
 
 	//Top-Left Diagonals
-	struct Node *cur = NULL;
-	for(i=2;i>=-3;i--)
+	Node *cur = NULL;
+	for(int i=2;i>=-3;i--)
 	{
 		cur = head;
 		// printf("Iteration %d ---------------------------------------------------\n",i);
@@ -145,7 +142,7 @@ int findDiag(struct Node *head)
 		arrsize = i>-1 ? 6 - i : i+7;
 		// printf("arrsize = %d\n",arrsize);
 		count = 0;
-		arr = (char *)malloc(sizeof(char)*arrsize);
+		arr = new char[arrsize];
 		while(cur->down!=NULL&&cur->right!=NULL)
 		{
 			arr[count++] =  cur->color;
@@ -157,20 +154,20 @@ int findDiag(struct Node *head)
 		// printf("%s\n",arr);
 		if(strstr(arr,"RRRR")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return R;
 		}
 		if(strstr(arr,"YYYY")!=NULL)
 		{
-			free(arr);
+			delete [] arr;
 			return Y;
 		}
-		free(arr);
+		delete [] arr;
 	}
 	return 0;
 }
 
-int isGameOver(struct Node *head)
+int isGameOver(Node *head)
 {
 	int i,t;
 	for(i=0;i<6;i++)

@@ -1,25 +1,23 @@
-//------------------------------------------------
-//----------Header File for Player----------------
-//------------------------------------------------
+#include <string>
 
 //Structure for Player
 struct Player
 {
-    char name[30];
+    std::string name;
     int color;
 };
 
 //Gets Player Info
 //Param struct Player pointer, Player Number
-void getPlayerInfo (struct Player *p, int playerNum)
+void getPlayerInfo (Player *p, int playerNum)
 {
-    char s[30];
-    printf("Enter Player %d Name\n", playerNum);
-    scanf("%s", s);
+    std::string s;
+    std::cout << "Enter Player " << playerNum << " Name\n";
+    std::cin >> s;
 
     if(playerNum==1)
     	 p->color = 'R';
     else
     	p->color = 'Y';
-    strcpy(p->name, s);
+    p->name = s;
 }
